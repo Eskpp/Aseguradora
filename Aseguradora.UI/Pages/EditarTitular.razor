@@ -1,0 +1,62 @@
+@page "/titular/{Id:int?}"
+@inject ObtenerTitularUseCase ObtenerTitularUseCase
+@inject ModificarTitularUseCase ModificarTitularUseCase
+@inject NavigationManager Navegador
+@inject AgregarTitularUseCase AgregarTitularUseCase
+
+@if (_esNuevoTitular)
+{
+    <h3>Agregando un nuevo titular</h3>
+}
+else
+{
+    <h3>Modificando al titular "@_titular.Dni"</h3>
+}
+<label for="Dni">Dni</label>
+<input placeholder="Dni" @bind="_titular.Dni" class="form-control" required>
+<label for="Apellido">Apellido</label>
+<input placeholder="Apellido" @bind="_titular.Apellido" class="form-control" required>
+<label for="Nombre">Nombre</label>
+<input placeholder="Nombre" @bind="_titular.Nombre" class="form-control" required>
+<label for="Telefono">Teléfono</label>
+<input placeholder="Telefono" @bind="_titular.Telefono" class="form-control" required>
+<label for="Direccion">Direccion</label>
+<input placeholder="Direccion" @bind="_titular.Direccion" class="form-control">
+<label for="Email">Email</label>
+<input placeholder="Email" @bind="_titular.Email" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code
+{
+    Titular _titular = new Titular();
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevoTitular = true;
+    protected override void OnParametersSet()
+    {
+        if(Id != null)
+        {
+            var tit_hallado = ObtenerTitularUseCase.Ejecutar(Id.Value);
+            if(tit_hallado != null)
+            {
+                _titular = tit_hallado;
+                _esNuevoTitular = false;
+            }
+        }
+    }
+    
+    void Aceptar()
+    {
+        if (_esNuevoTitular) //si es nuevo te manda a asignarle un auto
+        {
+            AgregarTitularUseCase.Ejecutar(_titular);
+            //_titular = new Titular();
+            Navegador.NavigateTo($"/vehiculo/{_titular.Id}/");
+        }
+        else //si edita te devuelve a la lista
+        {
+            ModificarTitularUseCase.Ejecutar(_titular);
+            _titular = new Titular();
+            Navegador.NavigateTo("listadotitulares");
+        }        
+    }
+}

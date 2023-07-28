@@ -1,0 +1,78 @@
+@page "/listadovehiculos"
+@inject ListarVehiculosUseCase ListarVehiculosUseCase
+@inject EliminarVehiculoUseCase EliminarVehiculoUseCase
+@inject EliminarPolizaUseCase EliminarPolizaUseCase
+@inject ObtenerPolizaDesdeVehiculoUseCase ObtenerPolizaDesdeVehiculoUseCase
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo"/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>DOMINIO</th>
+            <th>MARCA</th>
+            <th>AÑO</th>
+            <th>ID TITULAR</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in _lista)
+        {
+            <tr>
+                <td>@v.Id</td>
+                <td>@v.Dominio</td>
+                <td>@v.Marca</td>
+                <td>@v.Anio</td>
+                <td>@v.TitularId</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-pencil" @onclick="()=>ModificarVehiculo(v)"></span>
+                    </button>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-loop" @onclick="()=>CambiarPoliza(v)"></span>
+                    </button>
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(v)">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Vehiculo> _lista = new List<Vehiculo>();
+        protected override void OnInitialized()
+        {
+            _lista = ListarVehiculosUseCase.Ejecutar();
+        }
+
+        DialogoConfirmacion dialogo = null!;
+        private void ConfirmarEliminacion(Vehiculo v)
+        {
+            dialogo.Mensaje = $"¿Desea eliminar al Vehiculo {v.Dominio}?";
+            dialogo.OnConfirmado = EventCallback.Factory.Create(this,()=>Eliminar(v));
+            dialogo.Mostrar();
+        }
+        private void Eliminar(Vehiculo v)
+        {
+            EliminarVehiculoUseCase.Ejecutar(v.Id);
+            _lista = ListarVehiculosUseCase.Ejecutar(); //se actualiza la lista
+        }
+        void ModificarVehiculo(Vehiculo v)
+        {
+            Navegador.NavigateTo($"vehiculo/{v.TitularId}/{v.Id}");
+        }
+        void CambiarPoliza(Vehiculo v)
+        {
+            var poliza = ObtenerPolizaDesdeVehiculoUseCase.Ejecutar(v.Id);
+            if (poliza != null)
+            {
+                EliminarPolizaUseCase.Ejecutar(poliza.Id); //si tiene poliza la elimina
+            }
+            Navegador.NavigateTo($"poliza/{v.Id}/"); //y luego manda a crear una poliza nueva
+        }
+}

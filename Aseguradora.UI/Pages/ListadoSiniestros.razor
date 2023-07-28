@@ -1,0 +1,74 @@
+@page "/listadosiniestros"
+@inject ListarSiniestrosUseCase ListarSiniestrosUseCase
+@inject EliminarSiniestroUseCase EliminarSiniestroUseCase
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo"/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>POLIZA ID</th>
+            <th>INGRESO</th>
+            <th>OCURRENCIA</th>
+            <th>DIRECCION</th>
+            <th>DESCRIPCION</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in _lista)
+        {
+            <tr>
+                <td>@s.Id</td>
+                <td>@s.PolizaId</td>
+                <td>@s.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                <td>@s.FechaOcurrencia.ToString("dd/MM/yyyy")</td>
+                <td>@s.Direccion</td>
+                <td>@s.Descripcion</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-pencil" @onclick="()=>ModificarSiniestro(s)"></span>
+                    </button>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-plus" @onclick="()=>AgregarTercero(s)"></span>
+                    </button>
+                    <!--  deberia agregar un boton para añadir tercero-->
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(s)">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Siniestro> _lista = new List<Siniestro>();
+        protected override void OnInitialized()
+        {
+            _lista = ListarSiniestrosUseCase.Ejecutar();
+        }
+
+        DialogoConfirmacion dialogo = null!;
+        private void ConfirmarEliminacion(Siniestro s)
+        {
+            dialogo.Mensaje = $"¿Desea eliminar el siniestro {s.Id}?";
+            dialogo.OnConfirmado = EventCallback.Factory.Create(this,()=>Eliminar(s));
+            dialogo.Mostrar();
+        }
+        private void Eliminar(Siniestro s)
+        {
+            EliminarSiniestroUseCase.Ejecutar(s.Id);
+            _lista = ListarSiniestrosUseCase.Ejecutar(); //se actualiza la lista
+        }
+        void ModificarSiniestro(Siniestro s)
+        {
+            Navegador.NavigateTo($"siniestro/{s.PolizaId}/{s.Id}");
+        }
+        void AgregarTercero(Siniestro s)
+        {
+            Navegador.NavigateTo($"tercero/{s.Id}/");
+        }
+}

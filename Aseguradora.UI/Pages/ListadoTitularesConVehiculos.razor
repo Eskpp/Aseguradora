@@ -1,0 +1,135 @@
+@page "/listartitularesconvehiculos"
+@inject ListarTitularesConSusVehiculosUseCase ListarTitularesConSusVehiculosUseCase
+@inject EliminarTitularUseCase EliminarTitularUseCase
+@inject ListarVehiculosUseCase ListarVehiculosUseCase
+@inject EliminarVehiculoUseCase EliminarVehiculoUseCase
+@inject EliminarPolizaUseCase EliminarPolizaUseCase
+@inject ObtenerPolizaDesdeVehiculoUseCase ObtenerPolizaDesdeVehiculoUseCase
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo" />
+<table class="table">
+    <thead>
+        <tr>
+            <th>DNI</th>
+            <th>APELLIDO</th>
+            <th>TELÉFONO</th>
+            <th>EMAIL</th>
+            <th>ACCIÓN</th>
+            <th>VEHÍCULOS</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in _lista)
+        {
+            <tr>
+                <td>@t.Dni</td>
+                <td>@t.Apellido</td>
+                <td>@t.Telefono</td>
+                <td>@t.Email</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-pencil" @onclick="()=>ModificarTitular(t)"></span>
+                    </button>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-plus" @onclick="()=>AgregarVehiculo(t)"></span>
+                    </button>
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacionT(t)">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </td>
+                @if (t.Vehiculos!.Count() > 0)
+                {
+                <td>
+                    <table class="tabla-interna">
+                        <thead>
+                            <tr>
+                                <th>DOMINIO</th>
+                                <th>MARCA</th>
+                                <th>AÑO</th>
+                                <th>ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var v in t.Vehiculos!)
+                            {
+                                <tr>
+                                    <td>@v.Dominio</td>
+                                    <td>@v.Marca</td>
+                                    <td>@v.Anio</td>
+                                    <td>
+                                        <button class="btn btn-primary">
+                                            <span class="oi oi-pencil" @onclick="()=>ModificarVehiculo(v)"></span>
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            <span class="oi oi-loop" @onclick="()=>CambiarPoliza(v)"></span>
+                                        </button>
+                                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacionV(v)">
+                                            <span class="oi oi-trash"></span>
+                                        </button>
+                                    </td>
+                                </tr>                                    
+                            }
+                        </tbody>
+                        
+                    </table>
+                </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Titular> _lista = new List<Titular>();
+        protected override void OnInitialized()
+        {
+            _lista = ListarTitularesConSusVehiculosUseCase.Ejecutar();
+        }
+
+        DialogoConfirmacion dialogo = null!;
+        private void ConfirmarEliminacionT(Titular t)
+        {
+            dialogo.Mensaje = $"¿Desea eliminar al titular {t.Nombre} {t.Apellido}?";
+            dialogo.OnConfirmado = EventCallback.Factory.Create(this,()=>EliminarT(t));
+            dialogo.Mostrar();
+        }
+        private void ConfirmarEliminacionV(Vehiculo v)
+        {
+            dialogo.Mensaje = $"¿Desea eliminar al vehiculo {v.Dominio}?";
+            dialogo.OnConfirmado = EventCallback.Factory.Create(this,()=>EliminarV(v));
+            dialogo.Mostrar();
+        }
+        private void EliminarT(Titular t)
+        {
+            EliminarTitularUseCase.Ejecutar(t.Id);
+            _lista = ListarTitularesConSusVehiculosUseCase.Ejecutar(); //se actualiza la lista
+        }
+        private void EliminarV(Vehiculo v)
+        {
+            EliminarVehiculoUseCase.Ejecutar(v.Id);
+            _lista = ListarTitularesConSusVehiculosUseCase.Ejecutar(); //se actualiza la lista
+        }
+        void ModificarTitular(Titular t)
+        {
+            Navegador.NavigateTo($"titular/{t.Id}");
+        }
+        void AgregarVehiculo(Titular t)
+        {
+            Navegador.NavigateTo($"vehiculo/{t.Id}/");
+        }
+        void ModificarVehiculo(Vehiculo v)
+        {
+            Navegador.NavigateTo($"vehiculo/{v.TitularId}/{v.Id}");
+        }
+        void CambiarPoliza(Vehiculo v)
+        {
+            var poliza = ObtenerPolizaDesdeVehiculoUseCase.Ejecutar(v.Id);
+            if (poliza != null)
+            {
+                EliminarPolizaUseCase.Ejecutar(poliza.Id); //si tiene poliza la elimina
+            }
+            Navegador.NavigateTo($"poliza/{v.Id}/"); //y luego manda a crear una poliza nueva
+        }
+}

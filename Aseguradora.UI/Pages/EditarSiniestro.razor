@@ -1,0 +1,82 @@
+@page "/siniestro/{IdPoliza:int}/{Id:int?}"
+
+@inject ObtenerSiniestroUseCase ObtenerSiniestroUseCase
+@inject ObtenerPolizaUseCase ObtenerPolizaUseCase
+@inject ModificarSiniestroUseCase ModificarSiniestroUseCase
+@inject NavigationManager Navegador
+@inject AgregarSiniestroUseCase AgregarSiniestroUseCase
+
+
+<DialogoError @ref="error"/>
+@if (_esNuevoSiniestro)
+{
+    <h3>Agregando un nuevo Siniestro</h3>
+}
+else
+{
+    <h3>Modificando al Siniestro "@_siniestro.Id</h3>
+}
+<label for="FechaOcurrencia">Fecha de Ocurrencia</label>
+<input placeholder="FechaOcurrencia" @bind="_siniestro.FechaOcurrencia" class="form-control" type="date">
+<label for="Direccion">Dirección</label>
+<input placeholder="Direccion" @bind="_siniestro.Direccion" class="form-control">
+<label for="Descripcion">Descripción</label>
+<input placeholder="Descripcion" @bind="_siniestro.Descripcion" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code
+{
+    Siniestro _siniestro = new Siniestro();
+    DialogoError error = null!;
+    Poliza? _poliza = new Poliza();
+    [Parameter] public int IdPoliza { get; set; }
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevoSiniestro = true;
+    protected override void OnParametersSet()
+    {
+        _siniestro.PolizaId = IdPoliza;
+        _poliza = ObtenerPolizaUseCase.Ejecutar(IdPoliza);
+        if (_poliza != null)
+        {
+            if(Id != null)
+            {
+                var SiniestroHallado = ObtenerSiniestroUseCase.Ejecutar(Id.Value);
+                if(SiniestroHallado != null)
+                {
+                    _siniestro = SiniestroHallado;
+                    _esNuevoSiniestro = false;
+                }
+            }      
+        }
+        else 
+        {
+            error.Mostrar();
+        }
+          
+    }
+    
+    void Aceptar()
+    {
+        if (_esNuevoSiniestro)
+        {
+            _siniestro.FechaIngreso = DateTime.Now;
+            try
+            {
+                AgregarSiniestroUseCase.Ejecutar(_siniestro);
+                _siniestro = new Siniestro();
+                Navegador.NavigateTo("listadosiniestros");
+            }
+            catch (System.Exception e)
+            {
+                error.Mensaje=e.Message;
+                error.Mostrar();
+            }    
+        }
+        else
+        {
+            ModificarSiniestroUseCase.Ejecutar(_siniestro);
+            _siniestro = new Siniestro();
+            Navegador.NavigateTo("listadosiniestros");
+        }        
+    }
+}

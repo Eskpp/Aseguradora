@@ -1,0 +1,69 @@
+@page "/listadoterceros"
+@inject ListarTercerosUseCase ListarTercerosUseCase
+@inject EliminarTerceroUseCase EliminarTerceroUseCase
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo"/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>DNI</th>
+            <th>APELLIDO</th>
+            <th>NOMBRE</th>
+            <th>TELEFONO</th>
+            <th>ASEGURADORA</th>
+            <th>SINIESTRO ID</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in _lista)
+        {
+            <tr>
+                <td>@t.Id</td>
+                <td>@t.Dni</td>
+                <td>@t.Apellido</td>
+                <td>@t.Nombre</td>
+                <td>@t.Telefono</td>
+                <td>@t.Aseguradora</td>
+                <td>@t.SiniestroID</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-pencil" @onclick="()=>ModificarTercero(t)"></span>
+                    </button>
+                    <!--  deberia agregar un boton para añadir tercero-->
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(t)">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Tercero> _lista = new List<Tercero>();
+        protected override void OnInitialized()
+        {
+            _lista = ListarTercerosUseCase.Ejecutar();
+        }
+
+        DialogoConfirmacion dialogo = null!;
+        private void ConfirmarEliminacion(Tercero t)
+        {
+            dialogo.Mensaje = $"¿Desea eliminar el tercero {t.Id}?";
+            dialogo.OnConfirmado = EventCallback.Factory.Create(this,()=>Eliminar(t));
+            dialogo.Mostrar();
+        }
+        private void Eliminar(Tercero t)
+        {
+            EliminarTerceroUseCase.Ejecutar(t.Id);
+            _lista = ListarTercerosUseCase.Ejecutar(); //se actualiza la lista
+        }
+        void ModificarTercero(Tercero t)
+        {
+            Navegador.NavigateTo($"tercero/{t.SiniestroID}/{t.Id}");
+        }
+}

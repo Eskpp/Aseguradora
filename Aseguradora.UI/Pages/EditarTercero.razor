@@ -1,0 +1,61 @@
+@page "/tercero/{IdSiniestro:int}/{Id:int?}"
+
+@inject ObtenerTerceroUseCase ObtenerTerceroUseCase
+@inject ModificarTerceroUseCase ModificarTerceroUseCase
+@inject NavigationManager Navegador
+@inject AgregarTerceroUseCase AgregarTerceroUseCase
+
+@if (_esNuevoTercero)
+{
+    <h3>Agregando un nuevo Tercero</h3>
+}
+else
+{
+    <h3>Modificando al Tercero "@_Tercero.Id</h3>
+}
+<label for="Dni">Dni</label>
+<input placeholder="Dni" @bind="_Tercero.Dni" class="form-control" required>
+<label for="Apellido">Apellido</label> 
+<input placeholder="Apellido" @bind="_Tercero.Apellido" class="form-control" required>
+<label for="Nombre">Nombre</label>
+<input placeholder="Nombre" @bind="_Tercero.Nombre" class="form-control" required>
+<label for="Telefono">Teléfono</label>
+<input placeholder="Telefono" @bind="_Tercero.Telefono" class="form-control" required>
+<label for="Aseguradora">Aseguradora</label>
+<input placeholder="Aseguradora" @bind="_Tercero.Aseguradora" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code
+{
+    Tercero _Tercero = new Tercero();
+    [Parameter] public int IdSiniestro { get; set; }
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevoTercero = true;
+    protected override void OnParametersSet()
+    {
+        _Tercero.SiniestroID = IdSiniestro;
+        if(Id != null)
+        {
+            var TerceroHallado = ObtenerTerceroUseCase.Ejecutar(Id.Value);
+            if(TerceroHallado != null)
+            {
+                _Tercero = TerceroHallado;
+                _esNuevoTercero = false;
+            }
+        }        
+    }
+    
+    void Aceptar()
+    {
+        if (_esNuevoTercero)
+        {
+            AgregarTerceroUseCase.Ejecutar(_Tercero);
+        }
+        else
+        {
+            ModificarTerceroUseCase.Ejecutar(_Tercero);
+        }        
+        _Tercero = new Tercero();
+        Navegador.NavigateTo("listadoterceros");
+    }
+}

@@ -1,0 +1,101 @@
+is_global = true
+build_property.TargetFramework = net7.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Aseguradora.UI
+build_property.RootNamespace = Aseguradora.UI
+build_property.ProjectDir = C:\Users\Sanat\Documents\Facultad\Dotnet\Aseguradora\Aseguradora.UI\
+build_property.RazorLangVersion = 7.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Sanat\Documents\Facultad\Dotnet\Aseguradora\Aseguradora.UI
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/ListadoPolizas.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlzdGFkb1BvbGl6YXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/ListadoSiniestros.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlzdGFkb1Npbmllc3Ryb3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/ListadoTerceros.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlzdGFkb1RlcmNlcm9zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/ListadoTitulares.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlzdGFkb1RpdHVsYXJlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/ListadoVehiculos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlzdGFkb1ZlaGljdWxvcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/EditarPoliza.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdGFyUG9saXphLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-ll91uy4clx
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/EditarSiniestro.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdGFyU2luaWVzdHJvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-9ebwsf4xag
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/EditarTercero.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdGFyVGVyY2Vyby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-3i2e8nwtdz
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/EditarTitular.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdGFyVGl0dWxhci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-09afj0r888
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/EditarVehiculo.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdGFyVmVoaWN1bG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-b1lj7676za
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/ListadoTitularesConVehiculos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlzdGFkb1RpdHVsYXJlc0NvblZlaGljdWxvcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-3d7216s4iq
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Shared/DialogoConfirmacion.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXERpYWxvZ29Db25maXJtYWNpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-kzkkcmuwyw
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Shared/DialogoError.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXERpYWxvZ29FcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-tw4k7wasd4
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-g6x6s7l54y
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-7swmyw7ncn
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Sanat/Documents/Facultad/Dotnet/Aseguradora/Aseguradora.UI/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

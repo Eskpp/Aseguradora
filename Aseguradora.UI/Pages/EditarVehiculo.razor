@@ -1,0 +1,59 @@
+@page "/vehiculo/{IdTitular:int}/{Id:int?}"
+
+@inject ObtenerVehiculoUseCase ObtenerVehiculoUseCase
+@inject ModificarVehiculoUseCase ModificarVehiculoUseCase
+@inject NavigationManager Navegador
+@inject AgregarVehiculoUseCase AgregarVehiculoUseCase
+
+@if (_esNuevoVehiculo)
+{
+    <h3>Agregando un nuevo Vehiculo</h3>
+}
+else
+{
+    <h3>Modificando al Vehiculo "@_vehiculo.Dominio"</h3>
+}
+<label for="Dominio">Dominio</label>
+<input placeholder="Dominio" @bind="_vehiculo.Dominio" class="form-control" required>
+<label for="Marca">Marca</label>
+<input placeholder="Marca" @bind="_vehiculo.Marca" class="form-control">
+<label for="Anio">Año de fabricación</label>
+<input placeholder="Anio" @bind="_vehiculo.Anio" class="form-control" type="number">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code
+{
+    Vehiculo _vehiculo = new Vehiculo();
+    [Parameter] public int IdTitular { get; set; }
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevoVehiculo = true;
+    protected override void OnParametersSet()
+    {
+        _vehiculo.TitularId = IdTitular;
+        if(Id != null)
+        {
+            var vehiculoHallado = ObtenerVehiculoUseCase.Ejecutar(Id.Value);
+            if(vehiculoHallado != null)
+            {
+                _vehiculo = vehiculoHallado;
+                _esNuevoVehiculo = false;
+            }
+        }        
+    }
+    
+    void Aceptar()
+    {
+        if (_esNuevoVehiculo)
+        {
+            AgregarVehiculoUseCase.Ejecutar(_vehiculo);
+            //_Vehiculo = new Vehiculo();
+            Navegador.NavigateTo($"poliza/{_vehiculo.Id}/"); //si es nuevo te manda a crear la poliza
+        }
+        else
+        {
+            ModificarVehiculoUseCase.Ejecutar(_vehiculo);
+            _vehiculo = new Vehiculo();
+            Navegador.NavigateTo("listadovehiculos"); //si no es nuevo te devuelve a la lista
+        }        
+    }
+}

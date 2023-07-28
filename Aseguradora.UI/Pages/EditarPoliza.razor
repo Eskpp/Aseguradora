@@ -1,0 +1,61 @@
+@page "/poliza/{IdVehiculo:int}/{Id:int?}"
+
+@inject ObtenerPolizaUseCase ObtenerPolizaUseCase
+@inject ModificarPolizaUseCase ModificarPolizaUseCase
+@inject NavigationManager Navegador
+@inject AgregarPolizaUseCase AgregarPolizaUseCase
+
+@if (_esNuevaPoliza)
+{
+    <h3>Agregando una nueva Poliza</h3>
+}
+else
+{
+    <h3>Modificando la Poliza "@_Poliza.Id</h3>
+}
+<label for="MontoAsegurado">Monto Asegurado</label>
+<input id="MontoAsegurado" placeholder="MontoAsegurado" @bind="_Poliza.MontoAsegurado" class="form-control" type="number" required>
+<label for="Franquicia">Franquicia</label>
+<input placeholder="Franquicia" @bind="_Poliza.Franquicia" class="form-control">
+<label for="Cobertura">Cobertura</label>
+<input placeholder="Cobertura" @bind="_Poliza.Cobertura" class="form-control" required>
+<label for="FechaInicio">Fecha Inicio</label>
+<input placeholder="FechaInicio" @bind="_Poliza.FechaInicio" class="form-control" type="date">
+<label for="FechaFin">Fecha Fin</label>
+<input placeholder="FechaFin" @bind="_Poliza.FechaFin" class="form-control" type="date">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code
+{
+    Poliza _Poliza = new Poliza();
+    [Parameter] public int IdVehiculo { get; set; }
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevaPoliza = true;
+    protected override void OnParametersSet()
+    {
+        _Poliza.VehiculoId = IdVehiculo;
+        if(Id != null)
+        {
+            var PolizaHallada = ObtenerPolizaUseCase.Ejecutar(Id.Value);
+            if(PolizaHallada != null)
+            {
+                _Poliza = PolizaHallada;
+                _esNuevaPoliza = false;
+            }
+        }        
+    }
+    
+    void Aceptar()
+    {
+        if (_esNuevaPoliza)
+        {
+            AgregarPolizaUseCase.Ejecutar(_Poliza);
+        }
+        else
+        {
+            ModificarPolizaUseCase.Ejecutar(_Poliza);
+        }        
+        _Poliza = new Poliza();
+        Navegador.NavigateTo("listadopolizas");
+    }
+}

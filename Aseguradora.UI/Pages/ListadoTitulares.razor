@@ -1,0 +1,75 @@
+@page "/listadotitulares"
+@inject ListarTitularesUseCase ListarTitularesUseCase
+@inject EliminarTitularUseCase EliminarTitularUseCase
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo" />
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>DNI</th>
+            <th>APELLIDO</th>
+            <th>NOMBRE</th>
+            <th>TELÉFONO</th>
+            <th>DIRECCIÓN</th>
+            <th>EMAIL</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in _lista)
+        {
+            <tr>
+                <td>@t.Id</td>
+                <td>@t.Dni</td>
+                <td>@t.Apellido</td>
+                <td>@t.Nombre</td>
+                <td>@t.Telefono</td>
+                <td>@t.Direccion</td>
+                <td>@t.Email</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-pencil" @onclick="()=>ModificarTitular(t)"></span>
+                    </button>
+                    <button class="btn btn-primary">
+                        <span class="oi oi-plus" @onclick="()=>AgregarVehiculo(t)"></span>
+                    </button>
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(t)">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Titular> _lista = new List<Titular>();
+        protected override void OnInitialized()
+        {
+            _lista = ListarTitularesUseCase.Ejecutar();
+        }
+
+        DialogoConfirmacion dialogo = null!;
+        private void ConfirmarEliminacion(Titular t)
+        {
+            dialogo.Mensaje = $"¿Desea eliminar al titular {t.Nombre} {t.Apellido}?";
+            dialogo.OnConfirmado = EventCallback.Factory.Create(this,()=>Eliminar(t));
+            dialogo.Mostrar();
+        }
+        private void Eliminar(Titular t)
+        {
+            EliminarTitularUseCase.Ejecutar(t.Id);
+            _lista = ListarTitularesUseCase.Ejecutar(); //se actualiza la lista
+        }
+        void ModificarTitular(Titular t)
+        {
+            Navegador.NavigateTo($"titular/{t.Id}");
+        }
+        void AgregarVehiculo(Titular t)
+        {
+            Navegador.NavigateTo($"vehiculo/{t.Id}/");
+        }
+}
